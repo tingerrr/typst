@@ -255,7 +255,7 @@ impl SVGRenderer<'_> {
 
                 svg.elem("stop").attr("offset", start_t.repr()).attr(
                     "stop-color",
-                    start_c.to_space(&gradient_space).unwrap().to_hex(),
+                    start_c.to_space(&gradient_space).unwrap().to_hex(true),
                 );
 
                 // Generate intermediate stops between the two stops.
@@ -270,7 +270,7 @@ impl SVGRenderer<'_> {
                             let c = c.to_space(&gradient.space()).unwrap();
                             svg.elem("stop")
                                 .attr("offset", t.repr())
-                                .attr("stop-color", c.to_hex());
+                                .attr("stop-color", c.to_hex(true));
                         });
                 }
             }
@@ -278,7 +278,7 @@ impl SVGRenderer<'_> {
             if let Some((last_c, last_t)) = gradient.stops_ref().last() {
                 svg.elem("stop").attr("offset", last_t.repr()).attr(
                     "stop-color",
-                    last_c.to_space(&gradient.space()).unwrap().to_hex(),
+                    last_c.to_space(&gradient.space()).unwrap().to_hex(true),
                 );
             }
         }
@@ -307,11 +307,11 @@ impl SVGRenderer<'_> {
                 .with(|svg| {
                     svg.elem("stop")
                         .attr("offset", "0%")
-                        .attr("stop-color", gradient.c0.to_hex());
+                        .attr("stop-color", gradient.c0.to_hex(true));
 
                     svg.elem("stop")
                         .attr("offset", "100%")
-                        .attr("stop-color", gradient.c1.to_hex());
+                        .attr("stop-color", gradient.c1.to_hex(true));
                 });
         }
     }
@@ -456,7 +456,7 @@ impl SvgDisplay for Color {
             | ProcessColor::Luma(_)
             | ProcessColor::Cmyk(_)
             | ProcessColor::Hsv(_)) => {
-                f.push_str(&c.to_hex());
+                f.push_str(&c.to_hex(true));
             }
             ProcessColor::LinearRgb(rgb) => {
                 f.push_str("color(srgb-linear ");

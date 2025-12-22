@@ -284,7 +284,7 @@ fn len_utf16(string: &str) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{FileId, Source};
+    use crate::{FileId, PreferredCompilerVersion, Source};
 
     const TEST: &str = "ä\tcde\nf💛g\r\nhi\rjkl";
 
@@ -407,15 +407,16 @@ mod tests {
 
     #[test]
     fn test_unicode_replacement() {
+        let version = PreferredCompilerVersion::default();
         let test_id = FileId::new_for_test("test_unicode_replacement");
-        let mut source = Source::new(test_id, "é");
+        let mut source = Source::new(test_id, "é", version);
 
         // Test replacing `é` with `©`.
-        source.replace("©");
+        source.replace("©", version);
         assert_eq!(source.text(), "©");
 
         // Test replacing `©` with `₩`.
-        source.replace("₩");
+        source.replace("₩", version);
         assert_eq!(source.text(), "₩");
     }
 }
